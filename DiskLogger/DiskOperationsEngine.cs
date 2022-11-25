@@ -27,6 +27,7 @@ namespace DiskLogger
         }
 
 
+        private readonly string _folder;
         private readonly string _fileNamePrefix;
 
         #region Private fields
@@ -70,9 +71,10 @@ namespace DiskLogger
         /// <param name="fileNamePrefix">Prefix for log file names (example for value "prefix": prefix_2022-10-29.log)</param>
         public DiskOperationsEngine(string folder, string fileNamePrefix = "")
         {
+            _folder = folder;
             _fileNamePrefix = fileNamePrefix;
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+            if (!Directory.Exists(_folder))
+                Directory.CreateDirectory(_folder);
 
             OpenFile();
             _fileOperationsTimer = new Timer(_ => ProcessQueue(), null, FileOperationsInterval, FileOperationsInterval);
@@ -94,7 +96,7 @@ namespace DiskLogger
             {
                 var today = DateTime.Today;
                 _today = today;
-                var filename = GetFileName(today, _fileNamePrefix);
+                var filename = Path.Combine(_folder, GetFileName(today, _fileNamePrefix));
                 
                 lock (_logFileStreamLock)
                 {
