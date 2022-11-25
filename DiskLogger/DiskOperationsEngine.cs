@@ -27,7 +27,6 @@ namespace DiskLogger
         }
 
 
-        private readonly string _folder;
         private readonly string _fileNamePrefix;
 
         #region Private fields
@@ -68,13 +67,12 @@ namespace DiskLogger
         /// Initializes a new instance of <see cref="DiskOperationsEngine"/>
         /// </summary>
         /// <param name="folder">Folder that will contain log files, one per day</param>
-        /// <param name="fileNamePrefix">Prefix for log file names (example for value "prefix": prefix-2022-10-29.log)</param>
+        /// <param name="fileNamePrefix">Prefix for log file names (example for value "prefix": prefix_2022-10-29.log)</param>
         public DiskOperationsEngine(string folder, string fileNamePrefix = "")
         {
-            _folder = folder;
             _fileNamePrefix = fileNamePrefix;
-            if (!Directory.Exists(_folder))
-                Directory.CreateDirectory(_folder);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
 
             OpenFile();
             _fileOperationsTimer = new Timer(_ => ProcessQueue(), null, FileOperationsInterval, FileOperationsInterval);
@@ -96,7 +94,7 @@ namespace DiskLogger
             {
                 var today = DateTime.Today;
                 _today = today;
-                var filename = Path.Combine(_folder, $@"{_fileNamePrefix}_{_today:yyyy-MM-dd}.log");
+                var filename = GetFileName(today, _fileNamePrefix);
                 
                 lock (_logFileStreamLock)
                 {
@@ -109,6 +107,18 @@ namespace DiskLogger
             {
                 //exception ignored
             }
+        }
+
+        private static string GetFileName(DateTime date, string prefix)
+        {
+            if (prefix.Length == 0)
+                return $@"{date:yyyy-MM-dd}.log";
+
+            //in case if prefix contains invalid path characters - we replace them with '_' symbol
+            foreach (var invalidFileNameChar in Path.GetInvalidFileNameChars())
+                prefix = prefix.Replace(invalidFileNameChar, '_');
+
+            return $@"{prefix}_{date:yyyy-MM-dd}.log";
         }
 
         /// <summary>
