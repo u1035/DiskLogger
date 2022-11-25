@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0.1] - 2022-11-25
+## [1.0.0.2] - 2022-11-25
 
 - Fixed output file name when prefix is empty
 
