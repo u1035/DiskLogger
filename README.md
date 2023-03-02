@@ -1,4 +1,3 @@
-[![Build Status](https://img.shields.io/github/workflow/status/u1035/DiskLogger/.NET)](https://img.shields.io/github/workflow/status/u1035/DiskLogger/.NET)
 [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/DiskLogger)](https://www.nuget.org/packages/DiskLogger)
 [![Nuget](https://img.shields.io/nuget/dt/DiskLogger)](https://www.nuget.org/packages/DiskLogger)
 ![GitHub](https://img.shields.io/github/license/u1035/DiskLogger)
